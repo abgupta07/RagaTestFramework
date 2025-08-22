@@ -4,8 +4,8 @@ let llmConfigs = [];
 let searchConfigs = [];
 let evaluations = [];
 
-// API base URL
-const API_BASE = '';
+// API base URL - Python backend should be running on port 8000
+const API_BASE = 'http://localhost:8000';
 
 // Page navigation
 function showPage(pageId) {
@@ -40,9 +40,39 @@ function showPage(pageId) {
     }
 }
 
+// Check backend connectivity
+async function checkBackendConnectivity() {
+    try {
+        const response = await fetch(`${API_BASE}/evaluations`);
+        return response.ok;
+    } catch (error) {
+        return false;
+    }
+}
+
+// Show backend connection status
+async function showBackendStatus() {
+    const isConnected = await checkBackendConnectivity();
+
+    if (!isConnected) {
+        const alertDiv = document.createElement('div');
+        alertDiv.className = 'alert alert-warning alert-dismissible fade show';
+        alertDiv.innerHTML = `
+            <h6><i class="fas fa-exclamation-triangle me-2"></i>Python Backend Not Running</h6>
+            <p class="mb-2">The RAGAS evaluation backend is not running. Please start it to use all features:</p>
+            <code class="d-block mb-2">python start.py</code>
+            <small>The backend should run on <code>http://localhost:8000</code></small>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+
+        document.body.insertBefore(alertDiv, document.body.firstChild);
+    }
+}
+
 // Initialize app
 document.addEventListener('DOMContentLoaded', function() {
     showPage('dashboard');
+    showBackendStatus();
 });
 
 // Dashboard functions
