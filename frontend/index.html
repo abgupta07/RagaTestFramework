@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Test App - RAGAS</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#dashboard">
+                <i class="fas fa-robot me-2"></i>AI Test App - RAGAS
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="#dashboard" onclick="showPage('dashboard')">
+                    <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+                </a>
+                <a class="nav-link" href="#evaluation" onclick="showPage('evaluation')">
+                    <i class="fas fa-chart-line me-1"></i>RAG Evaluation
+                </a>
+                <a class="nav-link" href="#compare" onclick="showPage('compare')">
+                    <i class="fas fa-balance-scale me-1"></i>Compare RAG
+                </a>
+                <a class="nav-link" href="#settings" onclick="showPage('settings')">
+                    <i class="fas fa-cog me-1"></i>Settings
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-3">
+        <!-- Dashboard Page -->
+        <div id="dashboard" class="page">
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="page-title">
+                        <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                    </h2>
+                </div>
+            </div>
+            
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <div class="stats-icon">
+                            <i class="fas fa-flask"></i>
+                        </div>
+                        <div class="stats-content">
+                            <h3 id="total-evaluations">0</h3>
+                            <p>Total Evaluations</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <div class="stats-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="stats-content">
+                            <h3 id="avg-faithfulness">0.0</h3>
+                            <p>Avg Faithfulness</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <div class="stats-icon">
+                            <i class="fas fa-bullseye"></i>
+                        </div>
+                        <div class="stats-content">
+                            <h3 id="avg-relevancy">0.0</h3>
+                            <p>Avg Relevancy</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <div class="stats-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stats-content">
+                            <h3 id="last-evaluation">Never</h3>
+                            <p>Last Evaluation</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="fas fa-history me-2"></i>Recent Evaluations
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Date</th>
+                                            <th>Faithfulness</th>
+                                            <th>Relevancy</th>
+                                            <th>Context Recall</th>
+                                            <th>Context Precision</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recent-evaluations">
+                                        <tr>
+                                            <td colspan="7" class="text-center text-muted">
+                                                No evaluations found
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RAG Evaluation Page -->
+        <div id="evaluation" class="page d-none">
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="page-title">
+                        <i class="fas fa-chart-line me-2"></i>RAG Evaluation
+                    </h2>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="fas fa-upload me-2"></i>Upload Test Data
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label for="test-file" class="form-label">JSON Test File</label>
+                                <input type="file" class="form-control" id="test-file" accept=".json">
+                                <div class="form-text">
+                                    Upload a JSON file with test cases.
+                                    <a href="#" onclick="downloadSample()" class="text-decoration-none">
+                                        <i class="fas fa-download me-1"></i>Download Sample
+                                    </a>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-primary" onclick="uploadTestData()">
+                                <i class="fas fa-upload me-1"></i>Upload & Validate
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card mt-3" id="test-data-preview" style="display: none;">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="fas fa-table me-2"></i>Test Data Preview
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Question</th>
+                                            <th>Ground Truth</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="test-data-table">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="fas fa-cogs me-2"></i>Evaluation Configuration
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <form id="evaluation-form">
+                                <div class="mb-3">
+                                    <label for="evaluation-name" class="form-label">Evaluation Name</label>
+                                    <input type="text" class="form-control" id="evaluation-name" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="llm-config" class="form-label">LLM Configuration</label>
+                                    <select class="form-select" id="llm-config" required>
+                                        <option value="">Select LLM Configuration</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="ragas-llm-config" class="form-label">RAGAS LLM Configuration</label>
+                                    <select class="form-select" id="ragas-llm-config" required>
+                                        <option value="">Select RAGAS LLM Configuration</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="search-config" class="form-label">Search Configuration</label>
+                                    <select class="form-select" id="search-config" required onchange="loadIndexes()">
+                                        <option value="">Select Search Configuration</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="index-name" class="form-label">Index Name</label>
+                                    <select class="form-select" id="index-name" required>
+                                        <option value="">Select Search Configuration First</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="assistant-prompt" class="form-label">Assistant Prompt</label>
+                                    <textarea class="form-control" id="assistant-prompt" rows="3"></textarea>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="rag-prompt" class="form-label">RAG Prompt</label>
+                                    <textarea class="form-control" id="rag-prompt" rows="3" 
+                                              placeholder="Use the context below to answer.\n{context}\n\nQuestion: {question}"></textarea>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="top-k" class="form-label">Top K</label>
+                                            <input type="number" class="form-control" id="top-k" value="5" min="1" max="20">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="temperature" class="form-label">Temperature</label>
+                                            <input type="number" class="form-control" id="temperature" value="0.7" min="0" max="2" step="0.1">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button type="button" class="btn btn-success btn-lg w-100" onclick="runEvaluation()" id="run-btn">
+                                    <i class="fas fa-play me-1"></i>Run RAGAS Evaluation
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div class="row mt-4" id="results-section" style="display: none;">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="fas fa-chart-bar me-2"></i>Evaluation Results
+                            </h5>
+                        </div>
+                        <div class="card-body" id="results-content">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Compare RAG Page -->
+        <div id="compare" class="page d-none">
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="page-title">
+                        <i class="fas fa-balance-scale me-2"></i>Compare RAG Evaluations
+                    </h2>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Select Evaluations to Compare</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label for="comparison-eval1" class="form-label">First Evaluation</label>
+                                <select class="form-select" id="comparison-eval1">
+                                    <option value="">Select First Evaluation</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="comparison-eval2" class="form-label">Second Evaluation</label>
+                                <select class="form-select" id="comparison-eval2">
+                                    <option value="">Select Second Evaluation</option>
+                                </select>
+                            </div>
+                            <button type="button" class="btn btn-primary" onclick="compareEvaluations()">
+                                <i class="fas fa-balance-scale me-1"></i>Compare
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div id="comparison-results" style="display: none;">
+                        <!-- Comparison results will be displayed here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Page -->
+        <div id="settings" class="page d-none">
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="page-title">
+                        <i class="fas fa-cog me-2"></i>Settings
+                    </h2>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">
+                                <i class="fas fa-brain me-2"></i>LLM Configurations
+                            </h5>
+                            <button class="btn btn-primary btn-sm" onclick="showLLMForm()">
+                                <i class="fas fa-plus me-1"></i>Add New
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div id="llm-configs-list">
+                                <!-- LLM configs will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">
+                                <i class="fas fa-search me-2"></i>Search Configurations
+                            </h5>
+                            <button class="btn btn-primary btn-sm" onclick="showSearchForm()">
+                                <i class="fas fa-plus me-1"></i>Add New
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div id="search-configs-list">
+                                <!-- Search configs will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- LLM Configuration Modal -->
+    <div class="modal fade" id="llmConfigModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">LLM Configuration</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="llm-form">
+                        <input type="hidden" id="llm-id">
+                        <div class="mb-3">
+                            <label for="llm-name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="llm-name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="llm-provider" class="form-label">Provider</label>
+                            <select class="form-select" id="llm-provider" required>
+                                <option value="azure-openai">Azure OpenAI</option>
+                                <option value="openai">OpenAI</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="llm-endpoint" class="form-label">Chat Endpoint</label>
+                            <input type="url" class="form-control" id="llm-endpoint" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="llm-deployment" class="form-label">Deployment Name</label>
+                            <input type="text" class="form-control" id="llm-deployment" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="llm-api-version" class="form-label">API Version</label>
+                            <input type="text" class="form-control" id="llm-api-version" value="2024-02-15-preview" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="llm-subscription-key" class="form-label">Subscription Key</label>
+                            <input type="password" class="form-control" id="llm-subscription-key" required>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="llm-temperature" class="form-label">Temperature</label>
+                                    <input type="number" class="form-control" id="llm-temperature" value="0.5" min="0" max="2" step="0.1">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="llm-max-tokens" class="form-label">Max Tokens</label>
+                                    <input type="number" class="form-control" id="llm-max-tokens" value="1024" min="1">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="saveLLMConfig()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Configuration Modal -->
+    <div class="modal fade" id="searchConfigModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Search Configuration</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="search-form">
+                        <input type="hidden" id="search-id">
+                        <div class="mb-3">
+                            <label for="search-name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="search-name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="search-endpoint" class="form-label">Search Service Endpoint</label>
+                            <input type="url" class="form-control" id="search-endpoint" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="saveSearchConfig()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

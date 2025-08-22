@@ -1,14 +1,16 @@
 {
-  "name": "code",
+  "name": "ai-test-app-ragas",
   "version": "1.0.0",
-  "description": "",
+  "description": "AI Test App implementing RAGAS evaluation for RAG systems",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
     "dev": "node index.js",
+    "install-python-deps": "pip install -r requirements.txt",
+    "start-python": "python start.py",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": ["ai", "ragas", "rag", "evaluation", "azure", "python"],
   "author": "",
   "license": "ISC"
 }
