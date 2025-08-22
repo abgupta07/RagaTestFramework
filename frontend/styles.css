@@ -219,7 +219,7 @@ body {
 
 .config-header {
     display: flex;
-    justify-content-between;
+    justify-content: space-between;
     align-items: center;
     margin-bottom: 0.5rem;
 }
@@ -260,7 +260,6 @@ body {
     margin-top: 0.25rem;
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
     .stats-card {
         text-align: center;
@@ -281,7 +280,6 @@ body {
     }
 }
 
-/* Modal improvements */
 .modal-content {
     border-radius: 15px;
     border: none;
@@ -297,7 +295,6 @@ body {
     filter: invert(1);
 }
 
-/* File upload styling */
 .form-control[type="file"] {
     padding: 0.5rem;
 }
@@ -310,7 +307,6 @@ body {
     margin-top: 1rem;
 }
 
-/* Progress bar styling */
 .progress {
     height: 8px;
     border-radius: 4px;
