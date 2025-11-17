@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample HTML for URL Analyzer Testing</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://cdn.example.com/styles/main.css">
+    <link rel="stylesheet" href="/local/styles.css" media="screen">
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Roboto">
+    
+    <!-- Scripts -->
+    <script src="https://cdn.example.com/jquery.min.js"></script>
+    <script src="/js/app.js" async></script>
+    <script src="/js/analytics.js" defer></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans');
+        @import 'custom-styles.css';
+    </style>
+</head>
+<body>
+    <!-- Hyperlinks -->
+    <nav>
+        <a href="https://example.com">Home</a>
+        <a href="/about">About</a>
+        <a href="https://blog.example.com/posts">Blog</a>
+        <a href="../contact.html">Contact</a>
+    </nav>
+
+    <!-- Images -->
+    <section>
+        <h1>Image Gallery</h1>
+        <img src="https://example.com/images/hero.jpg" alt="Hero Image">
+        <img src="/assets/logo.png" alt="Company Logo">
+        <img srcset="small.jpg 480w, medium.jpg 800w, large.jpg 1200w" alt="Responsive Image">
+        
+        <!-- Picture element -->
+        <picture>
+            <source srcset="image-mobile.jpg 480w, image-tablet.jpg 768w" media="(max-width: 768px)">
+            <source srcset="image-desktop.jpg 1200w" media="(min-width: 769px)">
+            <img src="image-fallback.jpg" alt="Fallback Image">
+        </picture>
+    </section>
+
+    <!-- Data Attributes -->
+    <section>
+        <div data-src="https://example.com/lazy-image.jpg" class="lazy-load">Lazy Image</div>
+        <div data-url="https://api.example.com/data" class="data-loader">Data Loader</div>
+        <div data-href="https://example.com/redirect" class="clickable">Clickable Div</div>
+        <div data-background="https://example.com/bg.jpg" class="hero">Hero Section</div>
+        <div data-image="https://example.com/thumbnail.jpg" class="thumbnail">Thumbnail</div>
+    </section>
+
+    <!-- iFrame -->
+    <section>
+        <h2>Embedded Content</h2>
+        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="YouTube Video"></iframe>
+        <iframe src="https://maps.google.com/embed?location=..." title="Google Maps"></iframe>
+    </section>
+
+    <!-- Video -->
+    <section>
+        <h2>Videos</h2>
+        <video src="https://example.com/videos/intro.mp4" poster="https://example.com/posters/intro.jpg" controls></video>
+        
+        <video controls>
+            <source src="https://example.com/videos/demo.webm" type="video/webm">
+            <source src="https://example.com/videos/demo.mp4" type="video/mp4">
+            <source src="/videos/demo.ogv" type="video/ogg">
+        </video>
+    </section>
+
+    <!-- Audio -->
+    <section>
+        <h2>Audio</h2>
+        <audio src="https://example.com/audio/podcast.mp3" controls></audio>
+        
+        <audio controls>
+            <source src="https://example.com/audio/music.ogg" type="audio/ogg">
+            <source src="https://example.com/audio/music.mp3" type="audio/mpeg">
+            <source src="/audio/music.wav" type="audio/wav">
+        </audio>
+    </section>
+
+    <!-- Image Map with Area tags -->
+    <section>
+        <h2>Image Map</h2>
+        <img src="map-image.jpg" usemap="#workmap" alt="Workplace Map">
+        <map name="workmap">
+            <area shape="rect" coords="34,44,270,350" href="https://example.com/computer" alt="Computer">
+            <area shape="rect" coords="290,172,333,250" href="https://example.com/phone" alt="Phone">
+            <area shape="circle" coords="337,300,44" href="https://example.com/coffee" alt="Coffee">
+        </map>
+    </section>
+
+    <!-- Web Component with Shadow DOM (simulated) -->
+    <custom-element id="customElement">
+        <!-- This would have a shadow root in real implementation -->
+        <template shadowroot="open">
+            <style>
+                @import url('shadow-styles.css');
+            </style>
+            <a href="https://shadow.example.com">Shadow Link</a>
+            <img src="https://shadow.example.com/image.jpg" alt="Shadow Image">
+            <script src="https://shadow.example.com/script.js"></script>
+        </template>
+    </custom-element>
+
+    <!-- Additional Scripts -->
+    <script src="https://cdn.example.com/bootstrap.bundle.min.js"></script>
+    <script>
+        // Inline script - no URL to extract
+        console.log('Hello World');
+    </script>
+</body>
+</html>
